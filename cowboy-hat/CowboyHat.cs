@@ -48,8 +48,9 @@ namespace CowboyHat
 	    var parentSprite = parentSLeaser.sprites[anchorSprite];
 	    pos.Set(parentSprite.x, parentSprite.y);
 	    parentRotation = parentSprite.rotation;
-	    parentFlipY = parentSprite.scaleY < 0f;
-	    parentFlipX = parentSprite.scaleX >= 0f;
+	    parentFlipY = (flip ? parentSprite.scaleX : parentSprite.scaleY) < 0f;
+	    parentFlipX = (flip ? parentSprite.scaleY : parentSprite.scaleX) >= 0f;
+
 	}
 
         public override void DrawSprites(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, float timeStacker,
@@ -62,10 +63,10 @@ namespace CowboyHat
 
             sLeaser.sprites[0].SetPosition(pos + (headRadius + heightOffset)*headNormal);
 	    sLeaser.sprites[0].rotation = totalRot;
-	    sLeaser.sprites[0].scaleY = (flip ^ parentFlipY ? -1f : 1f);
-	    sLeaser.sprites[0].scaleX = (flip ^ parentFlipX ? -1f : 1f);
+	    //sLeaser.sprites[0].scaleY = (parentFlipY ? -1f : 1f);
+	    sLeaser.sprites[0].scaleX = (parentFlipX ? -1f : 1f);
 	    
-	    if (gm.culled && !gm.lastCulled) sLeaser.sprites[0].isVisible = !gm.culled;
+	    if (!gm.culled && gm.lastCulled) sLeaser.sprites[0].isVisible = !gm.culled;
 
             base.DrawSprites(sLeaser, rCam, timeStacker, camPos);
         }
@@ -77,7 +78,6 @@ namespace CowboyHat
         }
 
         public override void ApplyPalette(RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam, RoomPalette palette){
-            // set colour of label background
             Color color = Color.white;
             color.a = 1f;
             sLeaser.sprites[0].color = color;
