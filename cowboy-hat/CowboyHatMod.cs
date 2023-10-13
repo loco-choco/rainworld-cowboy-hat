@@ -22,7 +22,7 @@ namespace CowboyHat
         }
 	private void LoadResources(On.RainWorld.orig_OnModsInit orig, RainWorld self){
 	    orig(self);
-	    Futile.atlasManager.ActuallyLoadAtlasOrImage("cowboy-hat", "cowboyhat", "");
+	    Futile.atlasManager.ActuallyLoadAtlasOrImage("cowboy-hat", "sprites/cowboyhat", "");
 	    Logger.LogInfo("Adding Cowboy hat sprite to atlas!");
 	}
         private void GraphicsModuleOnInitiateSprites(On.GraphicsModule.orig_InitiateSprites orig, GraphicsModule self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam){

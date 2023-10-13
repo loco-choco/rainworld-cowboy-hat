@@ -2,8 +2,9 @@
   "id": "cowboyhat",
   "name": "Cowboy Hat",
   "authors": "Locochoco",
-  "description": "cowboyhat TEST",
+  "description": "Adds cowboy hats to slugcats and scavengers",
   "requirements": [],
   "requirements_names": [],
+  "tags": [ "Cosmetics" ],
   "checksum_override_version": false
 }

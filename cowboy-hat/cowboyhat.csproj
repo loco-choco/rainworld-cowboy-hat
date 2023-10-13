@@ -63,13 +63,17 @@
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
+	<Content Include="thumbnail.png">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <Link>../thumbnail.png</Link>
+	</Content>
 	<Content Include="modinfo.json">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  <Link>../modinfo.json</Link>
 	</Content>
-	<Content Include="cowboyhat.png">
+	<Content Include="sprites/cowboyhat.png">
 	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  <Link>../cowboyhat.png</Link>
+	  <Link>../sprites/cowboyhat.png</Link>
 	</Content>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
