@@ -45,7 +45,7 @@ namespace CowboyHat
 	}
 	private void InitOptions(){
 	    if(options == null) options = new CowboyHatOptions();
-	    MachineConnector.SetRegisteredOI("locochoco_cowboyhat", options);
+	    MachineConnector.SetRegisteredOI("cowboyhat", options);
 	}
 	private void LoadResources(){
 	    Futile.atlasManager.ActuallyLoadAtlasOrImage("cowboy-hat", "sprites/cowboyhat", "");
