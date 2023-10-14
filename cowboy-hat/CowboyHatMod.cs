@@ -9,21 +9,50 @@ using UnityEngine;
 
 namespace CowboyHat
 {
-    [BepInPlugin("locochoco.cowboyhat", "CowboyHat", "0.1.0")] // (GUID, mod name, mod version)
+    [BepInPlugin("locochoco.cowboyhat", "CowboyHat", "0.1.1")] // (GUID, mod name, mod version)
     public class CowboyHatMod : BaseUnityPlugin
     {
+	private static CowboyHatOptions options;
+	private static HatMode hatMode = HatMode.Both;
+	public enum HatMode{
+          Both,
+	  PlayerOnly,
+	  ScavOnly
+	};
+
 	private Dictionary<GraphicsModule, List<CowboyHat>> hatsOfGraphics = new Dictionary<GraphicsModule, List<CowboyHat>>();
         public void OnEnable(){
 	    Logger.LogInfo("Enabled!");
 	    On.GraphicsModule.InitiateSprites += GraphicsModuleOnInitiateSprites;
 	    On.GraphicsModule.DrawSprites += GraphicsModuleOnDrawSprites;
 	    On.PhysicalObject.DisposeGraphicsModule += PhysicalObjectOnDisposeGraphicsModule;
-	    On.RainWorld.OnModsInit += LoadResources;
+	    On.RainWorldGame.ctor += RainWorldGamector;
+	    On.RainWorld.OnModsInit += RainWorldOnModsInit;
+	    On.RainWorld.PostModsInit += RainWorldPostModsInit;
         }
-	private void LoadResources(On.RainWorld.orig_OnModsInit orig, RainWorld self){
+	private void RainWorldGamector(On.RainWorldGame.orig_ctor orig, RainWorldGame self, ProcessManager manager){
+	    orig(self, manager);
+	    ReadSettings();
+	}
+	private void RainWorldPostModsInit(On.RainWorld.orig_PostModsInit orig, RainWorld self){
 	    orig(self);
+	    ReadSettings();
+	}
+	private void RainWorldOnModsInit(On.RainWorld.orig_OnModsInit orig, RainWorld self){
+	    orig(self);
+	    InitOptions();
+	    LoadResources();
+	}
+	private void InitOptions(){
+	    if(options == null) options = new CowboyHatOptions();
+	    MachineConnector.SetRegisteredOI("locochoco_cowboyhat", options);
+	}
+	private void LoadResources(){
 	    Futile.atlasManager.ActuallyLoadAtlasOrImage("cowboy-hat", "sprites/cowboyhat", "");
 	    Logger.LogInfo("Adding Cowboy hat sprite to atlas!");
+	}
+	private void ReadSettings(){
+	    hatMode = options.HatMode.Value;
 	}
         private void GraphicsModuleOnInitiateSprites(On.GraphicsModule.orig_InitiateSprites orig, GraphicsModule self, RoomCamera.SpriteLeaser sLeaser, RoomCamera rCam){
             orig(self, sLeaser, rCam);
@@ -57,12 +86,12 @@ namespace CowboyHat
 	        return;
 	    Logger.LogInfo("Adding hat to someone!");
 	    List<CowboyHat> hats = new List<CowboyHat>();
-	    if(graphics is PlayerGraphics){
+	    if(hatMode != HatMode.ScavOnly && graphics is PlayerGraphics){
 	    	Logger.LogInfo("Adding hat to player!");
 		hats.Add(new CowboyHat(graphics, 3, 0f, 5f, false));
 		hatsOfGraphics.Add(graphics, hats);
 	    }
-	    else if(graphics is ScavengerGraphics scavGraph){
+	    else if(hatMode != HatMode.PlayerOnly && graphics is ScavengerGraphics scavGraph){
 	    	Logger.LogInfo("Adding hat to scav!");
 		
 		hats.Add(new CowboyHat(graphics, scavGraph.HeadSprite, 180f, 7f, false));

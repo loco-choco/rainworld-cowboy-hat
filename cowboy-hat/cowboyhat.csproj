@@ -60,6 +60,7 @@
     <ItemGroup>
         <Compile Include="CowboyHatMod.cs" />
         <Compile Include="CowboyHat.cs" />
+        <Compile Include="CowboyHatOptions.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
